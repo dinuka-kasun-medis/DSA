@@ -5,6 +5,7 @@
  */
 package Main;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class DSA_New {
     private static int mValue=0;
     private static int tValue=0;
     private static HashMap<Integer,Integer> jobCountTable=new HashMap<>();
+    private static ArrayList<String> tempList=new ArrayList<>();
     
     private static void readData(){
         System.out.print("Input number of employees : ");
@@ -43,16 +45,28 @@ public class DSA_New {
             Integer key = entry.getKey();
             String[] value = entry.getValue();
             System.out.println(key+"==="+Arrays.toString(value));
+            makeCombinations(value);
         }
         getJobCount(jobsTable, count,mValue);
+        
     }
     
     private static void calculations(int m){
         
     }
     
-    private static void makeCombinations(){
-        
+    private static void makeCombinations(String [] array){
+        String [] list=array;
+        String letter=null;
+        for (int j = 1; j < list.length; j++) {
+            letter=list[list.length-(j)];
+            for (int k = 0; k < list.length-j; k++) {
+                tempList.add(letter+list[k]);
+            }
+        }
+        for (String string : tempList) {
+            System.out.println(string);
+        }
     }
     
     public static void getJobCount(HashMap<Integer,String[]> table,int count,int m){
@@ -72,10 +86,11 @@ public class DSA_New {
             Integer key = entry.getKey();
             Integer value = entry.getValue();
             System.out.println("key "+key+"  count "+value);
-            if (value>=m) {
+            if (value>=m){
                 
             }
         }
+        
     }
     
     public static void main(String[] args) {
