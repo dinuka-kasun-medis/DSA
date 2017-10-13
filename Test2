@@ -484,3 +484,189 @@ public class DSA_New {
 3,4
 *
 */
+
+
+/////////////////////////////////////13.10.17.---8.36pm/////////////////////////////////
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Main;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+/**
+ *
+ * @author DinukaMedis
+ */
+public class DSA_New {
+    
+    private static Scanner input=new Scanner(System.in);
+    private static HashMap<Integer,String[]> jobsTable = new HashMap<>();
+    private static HashMap<String,Integer> selectedCombinations = new HashMap<>();
+    private static int count=0;
+    private static String line=null;
+    private static int i=0;
+    private static int mValue=0;
+    private static int tValue=0;
+    private static HashMap<Integer,Integer> jobCountTable=new HashMap<>();
+    private static ArrayList<String> tempList=new ArrayList<>();
+    
+    private static void readData(){
+        System.out.print("Input number of employees : ");
+        count=input.nextInt();
+        System.out.println("Input job details and enter * at the end ");
+        while (!(line = input.nextLine()).equals("*")){
+            String[] val = line.split(",");
+            jobsTable.put(i, val);
+            System.out.println("i "+i);
+            i++; 
+        }
+        System.out.print("Input M value : ");
+        mValue=input.nextInt();
+        System.out.println("count"+count);
+        getJobCount(jobsTable, count,mValue);
+        checkMvalue(mValue);
+        makeCombinations();
+        
+    }
+    
+    private static void calculations(int m){
+        for (Map.Entry<Integer, String[]> entry : jobsTable.entrySet()) {
+            Integer key = entry.getKey();
+            String[] value = entry.getValue();
+            //combinations check keranna ....
+            
+        }
+    }
+    
+    private static void makeCombinations(){
+        for (Map.Entry<Integer, String[]> entry : jobsTable.entrySet()) {
+            Integer key = entry.getKey();
+            String[] value = entry.getValue();
+            System.out.println(key+"==="+Arrays.toString(value));
+            combinationCreator(value);
+        }
+        for (String string : tempList) {
+            System.out.println(string);
+            selectedCombinations.put(string, 0);
+        }
+    }
+    
+    private static void combinationCreator(String [] array){
+        String [] list=array;
+        String letter=null;
+        for (int j = 1; j < list.length; j++) {
+            letter=list[list.length-(j)];
+            for (int k = 0; k < list.length-j; k++) {
+                if(!tempList.contains(letter+list[k])){
+                    tempList.add(letter+list[k]);
+                }  
+            }
+        }
+//        for (String string : tempList) {
+//            System.out.println(string);
+//        }
+    }
+    
+    public static void getJobCount(HashMap<Integer,String[]> table,int count,int m){
+        HashMap<Integer,String[]> jobs=table;
+        for (int i = 1; i <jobs.size(); i++) {
+            String [] array=jobs.get(i);
+            for (String string : array){
+                int num=Integer.parseInt(string);
+                int n=0;
+                if(jobCountTable.get(num)!=null){
+                    n=jobCountTable.get(num);
+                }
+                jobCountTable.put(num, (n+1)); 
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : jobCountTable.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println("key "+key+"  count "+value);
+            if (value>=m){
+                
+            }
+        }
+        
+    }
+    
+    private static void checkMainTable(String [] array){
+        // check main table to get count
+        ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(array));
+        for (Map.Entry<Integer, String[]> entry : jobsTable.entrySet()) {
+            int nums=0;
+            Integer key = entry.getKey();
+            String[] value = entry.getValue();
+            for (String string : value) {
+                if (Arrays.asList(arrayList).contains(string)) {
+                    nums++;
+                }
+            }
+            if (nums==arrayList.size()) {
+                //
+            }
+        }
+        
+    }
+    
+    private static void updateTable(HashMap<Integer,String[]> table,String employee){
+        HashMap<Integer,String[]> tempTable=table;
+        for (Map.Entry<Integer, String[]> entry : tempTable.entrySet()) {
+            Integer key = entry.getKey();
+            String[] value = entry.getValue();
+            for (String string : value) {
+                if (employee.equals(string)) {
+                    int index=Arrays.asList(value).indexOf(string);
+                    for (int j = index; j < value.length-1; j++) {
+                        value[j]=value[j+1];
+                    }
+                    value[value.length-1]="";
+                    jobsTable.put(key, value);
+                }
+            }
+        }
+        System.out.println("**************************************");
+        for (Map.Entry<Integer, String[]> entry : jobsTable.entrySet()) {
+            Integer key = entry.getKey();
+            String[] value = entry.getValue();
+            System.out.println(key+"---->"+Arrays.toString(value));
+            //makeCombinations(value);
+        }
+    }
+    
+    private static void checkMvalue(int m){
+        for (Map.Entry<Integer, Integer> entry : jobCountTable.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            if (value<m){
+                updateTable(jobsTable, Integer.toString(key));
+            }
+        }
+    }
+    
+    public static void main(String[] args) {
+        readData();
+        //updateTable(jobsTable,"4");
+    }
+}
+
+
+/*
+4
+1,2,3,4
+1,3,4
+2,3,4
+1,4
+3,4
+*
+*/
