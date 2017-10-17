@@ -1,0 +1,427 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package main;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Scanner;
+
+/**
+ *
+ * @author DinukaMedis
+ */
+public class AssignmentC_2016cs089 {
+    private static Scanner input=new Scanner(System.in);
+    private static HashMap<Integer,String[]> jobsTable = new HashMap<>();
+    private static HashMap<String,Integer> selectedCombinations = new HashMap<>();
+    private static HashMap<String,Integer> greaterMHash=new HashMap<>();
+    private static HashMap<Integer,ArrayList<String>> sizeListPTS=new HashMap<>();
+    private static ArrayList<String> tempSelectedCombinations1 = new ArrayList<>();
+    private static ArrayList<String> tempSelectedCombinations2 = new ArrayList<>();
+    private static ArrayList<String> greaterMlist = new ArrayList<>();
+    private static ArrayList<String> ptsList = new ArrayList<>();
+    private static ArrayList<String> ptsListFinal = new ArrayList<>(new LinkedHashSet<String>(ptsList));
+    private static int count=0;
+    private static String line=null;
+    private static int i=0;
+    private static int mValue=0;
+    //private static int tValue=0;
+    private static HashMap<Integer,Integer> jobCountTable=new HashMap<>();
+    private static ArrayList<String> tempList=new ArrayList<>();
+    private static int comSize=1;
+    private static boolean stop=false;
+    
+    
+    private static void readData(){
+        System.out.print("Input number of employees : ");
+        count=input.nextInt();
+        System.out.println("Input job details and enter * at the end ");
+        while (!(line = input.nextLine()).equals("*")){
+            String[] val = line.split(",");
+            jobsTable.put(i, val);
+            i++; 
+        }
+        System.out.print("Input M value : ");
+        mValue=input.nextInt();
+        for (int j = 1; j <=count; j++) {
+            tempSelectedCombinations1.add(Integer.toString(j));
+        }
+        getJobCount(jobsTable, count,mValue);
+        checkMvalue(mValue);
+        makeCombinations2();
+        
+    }
+    
+    private static void getJobCount(HashMap<Integer,String[]> table,int count,int m){
+        HashMap<Integer,String[]> jobs=table;
+        for (int i = 1; i <jobs.size(); i++) {
+            String [] array=jobs.get(i);
+            for (String string : array){
+                int num=Integer.parseInt(string);
+                int n=0;
+                if(jobCountTable.get(num)!=null){
+                    n=jobCountTable.get(num);
+                }
+                jobCountTable.put(num, (n+1)); 
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : jobCountTable.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println("key "+key+"  count "+value);
+            if (value>=m){
+                
+            }
+        }
+        
+    }
+    
+    private static void checkMvalue(int m){
+        for (Map.Entry<Integer, Integer> entry : jobCountTable.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            if (value<m){
+                updateTable(jobsTable, Integer.toString(key));
+                tempSelectedCombinations1.remove(Integer.toString(key));
+            }
+        }
+        System.out.println("M value check : "+tempSelectedCombinations1);
+    }
+    
+    private static void updateTable(HashMap<Integer,String[]> table,String employee){
+        HashMap<Integer,String[]> tempTable=table;
+        for (Map.Entry<Integer, String[]> entry : tempTable.entrySet()) {
+            Integer key = entry.getKey();
+            String[] value = entry.getValue();
+            for (String string : value) {
+                if (employee.equals(string)) {
+                    int index=Arrays.asList(value).indexOf(string);
+                    for (int j = index; j < value.length-1; j++) {
+                        value[j]=value[j+1];
+                    }
+                    value[value.length-1]="";
+                    jobsTable.put(key, value);
+                }
+            }
+        }
+        System.out.println("**************************************");
+        for (Map.Entry<Integer, String[]> entry : jobsTable.entrySet()) {
+            Integer key = entry.getKey();
+            String[] value = entry.getValue();
+            System.out.println(key+"---->"+Arrays.toString(value));
+        }
+    }
+    
+    private static void makeCombinations2(){
+        while(!stop) {
+            getAllCombinations1();
+            checkMainTable1();
+        }
+    }
+    
+    private static String[] getAllCombinations1(){
+        String ele="";
+        String letter="";
+        ArrayList<String> list=new ArrayList<>();
+        ArrayList<String> temp=new ArrayList<>();
+        ArrayList<String> temp2=new ArrayList<>();
+        if (tempSelectedCombinations2.isEmpty()) {
+            for (int j = 0; j < tempSelectedCombinations1.size()-1; j++) {
+                letter=tempSelectedCombinations1.get(tempSelectedCombinations1.size()-(j+1));
+                for (int k = 0; k < tempSelectedCombinations1.size(); k++) {
+                    String one=tempSelectedCombinations1.get(j)+tempSelectedCombinations1.get(k);
+                    String two=tempSelectedCombinations1.get(k)+tempSelectedCombinations1.get(j);
+                    if (!list.contains(one)&& !(tempSelectedCombinations1.get(j).equals(tempSelectedCombinations1.get(k)))) {
+                        ele=two;
+                        String [] a=ele.split("");
+                        Arrays.sort(a);
+                        String tm="";
+                        for (String string : a) {
+                            tm+=string;
+                        }
+                        list.add(tm);
+                    }
+                    
+                }
+            }
+        }else{
+            for (int j = 0; j < tempSelectedCombinations1.size(); j++) {
+                for (int k = 0; k < tempSelectedCombinations2.size(); k++) {
+                    String [] l1=tempSelectedCombinations2.get(k).split("");
+                    String [] l2=tempSelectedCombinations1.get(j).split("");
+                    Arrays.sort(l1);
+                    Arrays.sort(l2);
+                    temp=new ArrayList( Arrays.asList( l1));
+                    temp2=new ArrayList( Arrays.asList( l2));
+                    if (!temp.containsAll(temp2)) {
+                        ele=tempSelectedCombinations1.get(j)+tempSelectedCombinations2.get(k);
+                        String [] a=ele.split("");
+                        Arrays.sort(a);
+                        String tm="";
+                        for (String string : a) {
+                            tm+=string;
+                        }
+                        list.add(tm);
+                    }
+                    
+                }
+            }
+        }
+        ArrayList<String> newList=new ArrayList<>(new LinkedHashSet<String>(list));
+        if (newList.size()==0) {
+            stop=true;
+        }
+        String [] newArray=newList.toArray(new String[newList.size()]);
+        tempSelectedCombinations2=new ArrayList<>();
+        for (String string : newArray) {
+            tempSelectedCombinations2.add(string);
+        }
+        return newArray;
+    }
+    
+    private static void checkMainTable1(){
+        int count=0;
+        ArrayList<String> tempList1=new ArrayList<>();
+        ArrayList<String> tempList2=new ArrayList<>();
+        for (String string : tempSelectedCombinations2) {
+            tempList1=new ArrayList<>(Arrays.asList(string.split("")));
+            for (Map.Entry<Integer, String[]> entry : jobsTable.entrySet()) {
+                Integer key = entry.getKey();
+                String[] value = entry.getValue();
+                tempList2=new ArrayList<>(Arrays.asList(value));
+                if (tempList2.containsAll(tempList1)) {
+                    count++;
+                }
+            }
+            if (count>=mValue) {
+                selectedCombinations.put(string, count);
+                greaterMlist.add(string);
+                greaterMHash.put(string, count);
+            }
+            count=0;
+        }
+                
+        for (Map.Entry<String,Integer> entry : selectedCombinations.entrySet()) {
+            String key = entry.getKey();
+            int value = entry.getValue();
+            
+        }
+    }
+    
+    private static void calculatePTS2(){
+        ArrayList<String> list=new ArrayList<>();
+        ArrayList<Integer> keys=new ArrayList<>();
+        for (int j = 0; j < greaterMlist.size(); j++) {
+            list=new ArrayList<>();
+            int size=greaterMlist.get(j).length();
+            if (sizeListPTS.containsKey(size)) {
+                list=sizeListPTS.get(size);
+                list.add(greaterMlist.get(j));
+                sizeListPTS.put(size, list);
+            }else{
+                list.add(greaterMlist.get(j));
+                sizeListPTS.put(size, list);
+            }
+        }
+        for (Map.Entry<Integer,ArrayList<String>> entry : sizeListPTS.entrySet()) {
+            Integer key = entry.getKey();
+            ArrayList<String> value = entry.getValue();
+            keys.add(key);
+            System.out.println("List for pts :"+key+"----->"+value);
+        }
+        Collections.reverse(keys);
+        finalPTS(keys);
+    }
+    
+    private static void finalPTS(ArrayList<Integer> k){
+        ArrayList<String> tempList1=new ArrayList<>();
+        ArrayList<String> tempList2=new ArrayList<>();
+        ArrayList<Integer> keys=k;
+        ArrayList<String> tempSubSetList=new ArrayList<>();
+        ArrayList<String> tempHasSubSetList=new ArrayList<>();
+        ArrayList<String> tempNotSubSetList=new ArrayList<>();
+        tempList1=sizeListPTS.get(keys.get(0));
+        ptsList=tempList1;
+        int j=1;
+        int b=2;
+        System.out.println("Key size : "+(keys.size()>=j));
+        if (keys.size()>j) {
+            tempList2=sizeListPTS.get(keys.get(j));
+            for (String string : tempList1) {
+                for (String string1 : tempList2) {
+                    if (isSubSet(string1, string)) {
+                        tempSubSetList.add(string1);
+                    }else{
+                        tempNotSubSetList.add(string1);
+                    }
+                }
+            }
+            ptsList.addAll(tempSubSetList);
+            tempSubSetList=new ArrayList<>();
+            tempList2=tempList1;
+            tempList2=new ArrayList<>();
+            j++;
+        }
+        
+        
+        while(keys.size()>b) {
+            tempList2=sizeListPTS.get(keys.get(b));
+            tempList1=tempNotSubSetList;
+            tempNotSubSetList=new ArrayList<>();
+            for (String string : tempList1) {
+                for (String string1 : tempList2) {
+                    if (isSubSet(string1, string)) {
+                        tempSubSetList.add(string1);
+                        tempHasSubSetList.add(string);
+                    }else{
+                        tempNotSubSetList.add(string1);
+                    }
+                }
+            }
+            ptsList.addAll(tempHasSubSetList);
+            ptsList.addAll(tempSubSetList);
+            tempSubSetList=new ArrayList<>();
+            tempList2=tempList1;
+            tempList2=new ArrayList<>();
+            b++;
+        }
+        
+        for (String string : ptsList) {
+            if (!ptsListFinal.contains(string)) {
+                ptsListFinal.add(string);
+            }
+        }
+    }
+       
+    private static void calculateTV(int pts){
+        ArrayList<String> comb=new ArrayList<>();
+        ArrayList<String> comb2=new ArrayList<>();
+        for (String string : ptsListFinal) {
+            ArrayList<String> temp=combinationCheckerForPTS(string, pts);
+            //System.out.println("temp : "+temp);
+            for (String string1 : temp) {
+                //System.out.println("string1.length()<string.length() "+(string1.length()<string.length()));
+                //if (string1.length()<string.length()) {
+                    //System.out.println("Enterd...........................");
+                    ArrayList<String> word2=new ArrayList<>(temp);
+                    for (String string2 : word2) {
+                        string.replace(string2, "");
+                    }
+                    for (String string2 : word2) {
+                        String lhs=string;
+                        if (lhs.length()==1) {
+                            int a=jobCountTable.get(Integer.parseInt(lhs));
+                            int b=greaterMHash.get(string1);
+                            if (((b/a)*100)>=pts) {
+                                //System.out.println("lhs :"+lhs+" rhs :"+string);
+                                comb2.add(lhs);
+                            }
+                        }else if (greaterMlist.contains(lhs)) {
+                            int a=greaterMHash.get(lhs);
+                            int b=greaterMHash.get(string1);
+                            if (((b/a)*100)>=pts) {
+                                //System.out.println("lhs :"+lhs+" rhs :"+string);
+                                comb2.add(string);
+                            }
+                        }
+                    }
+                    
+                //}
+            }
+        }
+        ArrayList<String> comb3 = new ArrayList<>(new LinkedHashSet<String>(comb2));
+        for (String string : comb3) {
+            System.out.println("Final result :"+string);
+        }
+    }
+    
+    private static ArrayList<String> combinationCheckerForPTS(String txt,int pts){
+        String word=txt;
+        ArrayList<String> comb=new ArrayList<>();
+        ArrayList<String> comb2 = new ArrayList<>(new LinkedHashSet<String>(comb));
+//        String [] tempList=word.split("");
+        String[] database =word.split("");
+        for(int i=1; i<=database.length; i++){
+            String[] result = getAllLists(database, i);
+            for(int j=0; j<result.length; j++){
+                if (greaterMlist.contains(result[j])) {
+                    comb.add(result[j]);
+                }
+            }
+        }
+        return comb;
+    }
+    
+    public static String[] getAllLists(String[] elements, int lengthOfList){
+        String[] allLists = new String[(int)Math.pow(elements.length, lengthOfList)];
+        if(lengthOfList == 1) return elements; 
+        else {
+            String[] allSublists = getAllLists(elements, lengthOfList - 1);
+            int arrayIndex = 0;
+
+            for(int i = 0; i < elements.length; i++){
+                for(int j = 0; j < allSublists.length; j++){
+                    allLists[arrayIndex] = elements[i] + allSublists[j];
+                    arrayIndex++;
+                }
+            }
+            return allLists;
+        }
+    }
+    
+    private static boolean isSubSet(String a,String b){
+        ArrayList<String> tempList1=new ArrayList<>();
+        ArrayList<String> tempList2=new ArrayList<>();
+        tempList1=new ArrayList<>(Arrays.asList(a.split("")));
+        tempList2=new ArrayList<>(Arrays.asList(b.split("")));
+        return tempList2.containsAll(tempList1);
+    }
+
+    public static void main(String[] args) {
+        readData();
+        System.out.println("Greater M :"+greaterMlist);
+        calculatePTS2();
+        System.out.println("Comb 1"+tempSelectedCombinations1);
+        System.out.println("Comb 2"+tempSelectedCombinations2);
+        System.out.println("Pts list :"+ptsListFinal);
+        System.out.println("============================================================");
+        for (Map.Entry<String,Integer> entry : greaterMHash.entrySet()) {
+            String key = entry.getKey();
+            int value = entry.getValue();
+            System.out.println(key+" => "+value);
+        }
+        System.out.print("Input TV :");
+        int pts=input.nextInt();
+        calculateTV(pts);
+    }
+}
+
+
+/*
+4
+1,2,3,4
+1,3,4
+2,3,4
+1,4
+3,4
+*
+
+========================
+
+7
+1,2,3,4,5,6,7
+1,3,5,7
+2,4,5,6
+1,5
+5,6,7
+2,4,7
+2,3,4,5,6,7
+*
+*/
