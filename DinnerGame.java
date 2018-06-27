@@ -2,10 +2,11 @@ package test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
-class LIS{
+class DinnerGame{
 	private static void dinnerGame(int array[]){
 
             int tempArray[]=new int[array.length];//temporary array
@@ -64,6 +65,7 @@ class LIS{
                 number=tempArray[i];
             }
             
+            Collections.reverse(answerArray);
             System.out.println("Output increasing sequence : "+answerArray);
             
 	}
