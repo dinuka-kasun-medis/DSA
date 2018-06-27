@@ -1,28 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package test;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+public class ZigZag{
 
-/**
- *
- * @author DinukaMedis
- */
-public class ZidZag {
-    
+    /**
+     * check is first number less than second one
+     * @param a first number 
+     * @param b second number
+     * @return 
+     */
     private static boolean opposit(int a, int b){
         return a<b;
     }
-    
-    private static void ziGZagMethod(int array[]){
+
+    /**
+     * find the zigzag array
+     * @param array number sequence 
+     */
+    private static void zigZagMethod(int array[]){
 
         int tempArray [] = new int [array.length];
-        ArrayList<String> aditionalArray = new ArrayList<>();
 
         tempArray[0] = array[0];
         int index = 1;
@@ -34,69 +30,41 @@ public class ZidZag {
                     tempArray[index] = array[i+1];
                     index++;
                     isChechLess = false;
-                }else{
-                    aditionalArray.add(index+","+array[i+1]);
                 }	
             }else{
                 if (tempArray[index-1]>array[i+1] ) {
                     tempArray[index] = array[i+1];
                     index++;
                     isChechLess = true;
-                }else{
-                    aditionalArray.add(index+","+array[i+1]);
                 }
             }
         }
 
+        /**
+         * print the length of sequence
+         */
         System.out.println("Count of out put sequance : "+ index);
-        
-        System.out.println("Additional array : "+ aditionalArray);
-        
-        System.out.println("temp array : "+ Arrays.toString(tempArray));
-        
-        for (String string : aditionalArray) {
-            int index_new=Integer.parseInt(string.split(",")[0]);
-            int value=Integer.parseInt(string.split(",")[1]);
-            System.out.print("Elements of out put sequance : ");
-            for (int i=0 ;i<index ;i++ ) {
-                if (i==index_new) {
-                    System.out.print(value+" ");
-                }
-                System.out.print(tempArray[i]+" ");
-            }
-            System.out.println("");
-        }
-/*
-        System.out.print("Elements of out put sequance : ");
 
+        /**
+         * print the final answer
+         */
+        System.out.print("Elements of out put sequance : ");
         for (int i=0 ;i<index ;i++ ) {
             System.out.print(tempArray[i]+" ");
-            
-        }*/
-        //System.out.println("tempArray : "+Arrays.toString(tempArray));
-
+        }
     }
 
-	private static int[] deleteElement(int array[] ,int elementPosition){
-            int tempArray [] = array;
-            int returnArray [] = new int[array.length-1];
-            for (int i=0 ;i< array.length - elementPosition-1 ;i++ ) {
-                returnArray[i] = tempArray[i];
-            }
-            for (int i = elementPosition; i< returnArray.length ; i++ ) {
-                returnArray[i] = tempArray[i+1];
-            }
-            return returnArray;
-	}
-
-	public static void main(String args[]){
-            Scanner input = new Scanner(System.in);
-            System.out.print("Elements of sequance : ");
-            String numbers [] = input.nextLine().split(" ");
-            int[] array = Arrays.stream(numbers).mapToInt(Integer::parseInt).toArray();
-            //int array [] ={10, 22, 9, 33, 49, 50, 31, 60};
-            ziGZagMethod(array);
-	}
+    /**
+     * main method
+     * @param args 
+     */
+    public static void main(String args[]){
+        Scanner input = new Scanner(System.in);
+        System.out.print("Elements of sequance : ");
+        String numbers [] = input.nextLine().split(" ");// get input as a string line and converto string array splitting by " ".
+        int[] array = Arrays.stream(numbers).mapToInt(Integer::parseInt).toArray(); // covert to string array into integer array
+        zigZagMethod(array);
+    }
 }
-//1,17,5,10,13,15,10,5,16,8
-//1 17 5 10 13 15 10 5 16 8
+
+// 1 17 5 10 13 15 10 5 16 8
