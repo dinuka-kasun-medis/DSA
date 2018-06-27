@@ -56,7 +56,7 @@ class LIS{
 		Scanner input = new Scanner(System.in);
 		Random random = new Random();
 		System.out.print("Input number of invitations : ");
-		int noOfInvitations=input.nextInt();
+		/*int noOfInvitations=input.nextInt();
 		int[] array = new int[noOfInvitations];
 		for (int i=0 ;i<noOfInvitations ;i++ ) {
 			array[i] = random.nextInt(noOfInvitations+1);
@@ -64,7 +64,7 @@ class LIS{
 		System.out.println(Arrays.toString(array));
 		
 		longestIncreasingSubSeaquence(array);
-		
+		*/
 		System.out.println("\n========================================");
 
 		int lo[]={1,5,2,4,8,6};
@@ -74,5 +74,10 @@ class LIS{
 
 		int lol[]={1,3,2};
 		longestIncreasingSubSeaquence(lol);
+
+		System.out.println("\n========================================");
+
+		int lols[]={3,4,-1,5,8,2,3,12,7,9,10};
+		longestIncreasingSubSeaquence(lols);
 	}
 }
