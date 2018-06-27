@@ -1,70 +1,88 @@
-import java.util.*;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
+/**
+ *
+ * @author DinukaMedis
+ */
+
 class LIS{
-	public static void longestIncreasingSubSeaquence(int nums[]){
-	
-		int answerArray[]=new int[nums.length];
-		int tempArray[]=new int[nums.length];
-		for (int i=0;i<tempArray.length ;i++ ) {
-			tempArray[i]=1;
-		}
+	private static void longestIncreasingSubSeaquence(int array[]){
 
-		for (int i=1 ;i<nums.length ;i++ ) {
-			for (int j=0;j<i ;j++ ) {
-				if (nums[j]<nums[i]) {
-					if (tempArray[j]+1>tempArray[i]) {
-						tempArray[i] = tempArray[i] + 1;
-						answerArray[i] = j;
-					}
-				}
-			}
-		}
+            int tempArray[]=new int[array.length];
+            ArrayList<Integer> answerArray=new ArrayList<>();
+            //int answerArray[]=new int[array.length];
+            int mainArray[]=array;
 
-		int maxValue=1;
-		int maxIndex=0,k=0;
-		for (int number : tempArray) {
-			if (number>maxValue) {
-				maxValue = number;
-				maxIndex = k;
-				k++;
-			}
-		}
+            for (int i=0;i<tempArray.length ;i++ ) {
+                tempArray[i]=1;
+            }
 
-		int a = 0;
-		for (int i=0 ;i<nums.length - 1 ;i++ ) {
-			if (tempArray[i]==tempArray[i+1]) {
-				answerArray[a]=nums[i+1];
-			}else if (tempArray[i]<tempArray[i+1]) {
-				answerArray[a]=nums[i];
-				a++;
-			}else{
-				answerArray[a]=nums[i];
-				a++;
-			}
-		}
+            for (int i=1 ;i<array.length ;i++ ) {
+                for (int j=0;j<i ;j++ ) {
+                    if (array[j]<array[i]) {
+                        if (tempArray[j]+1>tempArray[i]) {
+                            tempArray[i] = tempArray[i] + 1;
+                        }
+                    }
+                }
+            }
 
-		System.out.println("tempArray : "+Arrays.toString(tempArray));
-		System.out.println("answerArray : "+Arrays.toString(answerArray));
+            int maxValue=1;
+            for (int number : tempArray) {
+                if (number>maxValue) {
+                    maxValue = number;
+                }
+            }
+            
+//            System.out.println("tempArray 1 :"+Arrays.toString(tempArray));
+            
+            for (int i = 0; i < array.length-1; i++) {
+                for (int j = i+1; j <  array.length-1; j++) {
+                    if (tempArray[i]>tempArray[j]) {
+                        int tem = tempArray[j];
+                        tempArray[i]=tempArray[j];
+                        tempArray[j]=tem;
+                        int tem2 = mainArray[j];
+                        mainArray[i]=mainArray[j];
+                        mainArray[j]=tem2;                        
+                    }else{
+                        
+                    }
+                }
+            }
+            
+            
+            int number=tempArray[array.length-1];
+            answerArray.add(mainArray[array.length-1]);
+            for (int i = array.length-2; i >=0; i--) {
+                int number2=tempArray[i];
+                if (number>number2) {
+                    answerArray.add(mainArray[i]);
+                }
+                number=tempArray[i];
+            }
+            System.out.println("tempArray :"+Arrays.toString(tempArray));
+            System.out.println(answerArray);
+                
 
-		System.out.print("Final Answer : ");
-		for (int i=0 ;i < maxValue ;i++ ) {
-			System.out.print(answerArray[i] + ", ");
-		}
-		
+
 	}
-
+	
 	public static void main(String args[]){
 		Scanner input = new Scanner(System.in);
 		Random random = new Random();
 		System.out.print("Input number of invitations : ");
-		/*int noOfInvitations=input.nextInt();
-		int[] array = new int[noOfInvitations];
-		for (int i=0 ;i<noOfInvitations ;i++ ) {
-			array[i] = random.nextInt(noOfInvitations+1);
-		}
-		System.out.println(Arrays.toString(array));
-		
-		longestIncreasingSubSeaquence(array);
-		*/
+
 		System.out.println("\n========================================");
 
 		int lo[]={1,5,2,4,8,6};
