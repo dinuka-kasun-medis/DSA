@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package test;
 
 import java.util.ArrayList;
@@ -10,23 +5,23 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-/**
- *
- * @author DinukaMedis
- */
-
 class LIS{
-	private static void longestIncreasingSubSeaquence(int array[]){
+	private static void dinnerGame(int array[]){
 
-            int tempArray[]=new int[array.length];
-            ArrayList<Integer> answerArray=new ArrayList<>();
-            //int answerArray[]=new int[array.length];
-            int mainArray[]=array;
+            int tempArray[]=new int[array.length];//temporary array
+            ArrayList<Integer> answerArray=new ArrayList<>();//this will stor final answer
+            int mainArray[]=array;//get the sending array
 
+            /**
+             * assign 1 to all elements in the temporary array
+             */
             for (int i=0;i<tempArray.length ;i++ ) {
                 tempArray[i]=1;
             }
 
+            /**
+             * find the longest increasing sub seaquence length
+             */
             for (int i=1 ;i<array.length ;i++ ) {
                 for (int j=0;j<i ;j++ ) {
                     if (array[j]<array[i]) {
@@ -37,15 +32,9 @@ class LIS{
                 }
             }
 
-            int maxValue=1;
-            for (int number : tempArray) {
-                if (number>maxValue) {
-                    maxValue = number;
-                }
-            }
-            
-//            System.out.println("tempArray 1 :"+Arrays.toString(tempArray));
-            
+            /**
+             * sort the temporary array and do the same changes to main array
+             */
             for (int i = 0; i < array.length-1; i++) {
                 for (int j = i+1; j <  array.length-1; j++) {
                     if (tempArray[i]>tempArray[j]) {
@@ -61,7 +50,10 @@ class LIS{
                 }
             }
             
-            
+            /**
+             * pick the longest increasing subsequence
+             * 
+             */
             int number=tempArray[array.length-1];
             answerArray.add(mainArray[array.length-1]);
             for (int i = array.length-2; i >=0; i--) {
@@ -71,31 +63,27 @@ class LIS{
                 }
                 number=tempArray[i];
             }
-            System.out.println("tempArray :"+Arrays.toString(tempArray));
-            System.out.println(answerArray);
-                
-
-
+            
+            System.out.println("Output increasing sequence : "+answerArray);
+            
 	}
 	
+        /**
+         * Main method
+         * @param args 
+         */
 	public static void main(String args[]){
-		Scanner input = new Scanner(System.in);
-		Random random = new Random();
-		System.out.print("Input number of invitations : ");
-
-		System.out.println("\n========================================");
-
-		int lo[]={1,5,2,4,8,6};
-		longestIncreasingSubSeaquence(lo);
-
-		System.out.println("\n========================================");
-
-		int lol[]={1,3,2};
-		longestIncreasingSubSeaquence(lol);
-
-		System.out.println("\n========================================");
-
-		int lols[]={3,4,-1,5,8,2,3,12,7,9,10};
-		longestIncreasingSubSeaquence(lols);
+            Scanner input = new Scanner(System.in);
+            Random random = new Random();
+            System.out.print("Input number of invitations : ");//
+            int noOfInvitations = input.nextInt();//get the no of invitations
+            int noCardArray [] = new int[noOfInvitations];
+            for (int i = 0; i < noOfInvitations; i++) {//generat no to all invitations
+                noCardArray[i] = random.nextInt(noOfInvitations+1);//make random numers from 1 to no of invitations
+            }
+            
+            System.out.println("Obtained sequence :"+Arrays.toString(noCardArray));// print the generated random number list
+            dinnerGame(noCardArray);// send generated random mumber list to make calculations
+            
 	}
 }
